@@ -74,10 +74,17 @@
             android:visibility="gone" />
 
         <TextView
+            android:id="@+id/main_flavor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="flavor"
+            tools:text="flavor"
+            android:visibility="gone"/>
+        <TextView
             android:id="@+id/main_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="description"
             tools:text="description"
             android:visibility="gone"/>
     </LinearLayout>

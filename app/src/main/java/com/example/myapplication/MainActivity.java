@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity{
                         card.setFlavor(jsonObject.optString("flavor",""));
                         card.setText(jsonObject.optString("text",""));
 
+                        final String imageUrl = "https://art.hearthstonejson.com/v1/render/latest/frFR/256x/" + card.getId() + ".png";
+                        card.setImage_url(imageUrl);
+
                         cardList.add(card);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -113,7 +116,8 @@ public class MainActivity extends AppCompatActivity{
                 adapter.notifyDataSetChanged();
                 progressDialog.dismiss();
 
-                setAllImagesUrl();
+                //setAllImagesUrl();
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -125,17 +129,4 @@ public class MainActivity extends AppCompatActivity{
         requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(jsonArrayRequest);
     }
-
-    // set all the images url
-    public void setAllImagesUrl(){
-        progressDialog.setMessage("Loading...");
-        progressDialog.show();
-        for (int i = 0; i<cardList.size(); i++ ){
-            final String imageUrl = "https://art.hearthstonejson.com/v1/render/latest/frFR/256x/" + cardList.get(i).getId()+ ".png";
-            cardList.get(i).setImage_url(imageUrl);
-            adapter.notifyDataSetChanged();
-        }
-        progressDialog.dismiss();
-    }
-
 }
