@@ -9,7 +9,7 @@ public class Card implements Serializable {
     private Integer attack;
     private Integer health;
     private String flavor;
-    private String text;
+    private String cardText;
     private String rarity;
     private String id;
     private String image_url;
@@ -17,14 +17,14 @@ public class Card implements Serializable {
     public Card()  {
     }
 
-    public Card(String name, String cardClass, Integer cost, Integer attack, Integer health, String flavor, String text, String rarity, String id, String image_url) {
+    public Card(String name, String cardClass, Integer cost, Integer attack, Integer health, String flavor, String cardText, String rarity, String id, String image_url) {
         this.name = name;
         this.cardClass = cardClass;
         this.cost = cost;
         this.attack = attack;
         this.health = health;
         this.flavor = flavor;
-        this.text = text;
+        this.cardText = cardText;
         this.rarity = rarity;
         this.id = id;
         this.image_url = image_url;
@@ -94,12 +94,12 @@ public class Card implements Serializable {
         this.flavor = flavor;
     }
 
-    public String getText() {
-        return text;
+    public String getCardText() {
+        return cardText;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setText(String cardText) {
+        this.cardText = cardText;
     }
 
     public Integer getHealth() {

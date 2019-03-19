@@ -11,6 +11,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.GridLayout;
@@ -102,7 +103,9 @@ public class MainActivity extends AppCompatActivity{
                         card.setHealth(jsonObject.optInt("health",0));
 
                         card.setFlavor(jsonObject.optString("flavor",""));
-                        card.setText(jsonObject.optString("text",""));
+                        String cardText = jsonObject.optString("text","");
+                        cardText = cardText.replaceAll("\\<.*?\\>", "");
+                        card.setText(cardText);
 
                         final String imageUrl = "https://art.hearthstonejson.com/v1/render/latest/frFR/256x/" + card.getId() + ".png";
                         card.setImage_url(imageUrl);

@@ -41,6 +41,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         holder.textName.setText(card.getName());
         holder.textClass.setText(card.getCardClass());
         holder.textCost.setText(String.valueOf(card.getCost()));
+        holder.textFlavor.setText(card.getFlavor());
+        holder.textDescription.setText(card.getCardText());
         //holder.imageView.setImageBitmap(card.getBitmap());
         Picasso.with(context).load(card.getImage_url()).into(holder.imageView);
 
@@ -55,7 +57,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
         private static final String EXTRA_MESSAGE = "card";
 
-        public TextView textID, textName, textClass, textCost;
+        public TextView textID, textName, textClass, textCost, textFlavor, textDescription;
         public ImageView imageView;
 
         public ViewHolder(View itemView) {
@@ -67,6 +69,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             textName = itemView.findViewById(R.id.main_name);
             textClass = itemView.findViewById(R.id.main_class);
             textCost = itemView.findViewById(R.id.main_cost);
+            textFlavor = itemView.findViewById(R.id.main_flavor);
+            textDescription = itemView.findViewById(R.id.main_description);
             imageView = itemView.findViewById(R.id.main_image);
         }
 
