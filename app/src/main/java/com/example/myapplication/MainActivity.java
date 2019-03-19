@@ -93,10 +93,16 @@ public class MainActivity extends AppCompatActivity{
                         JSONObject jsonObject = response.getJSONObject(i);
 
                         Card card = new Card();
-                        card.setId(jsonObject.getString("id"));
-                        card.setName(jsonObject.getString("name"));
-                        card.setCardClass(jsonObject.getString("cardClass"));
+                        card.setId(jsonObject.optString("id","no id"));
+                        card.setName(jsonObject.optString("name","no name"));
+                        card.setCardClass(jsonObject.optString("cardClass",""));
+
                         card.setCost(jsonObject.optInt("cost",0));
+                        card.setAttack(jsonObject.optInt("attack",0));
+                        card.setHealth(jsonObject.optInt("health",0));
+
+                        card.setFlavor(jsonObject.optString("flavor",""));
+                        card.setText(jsonObject.optString("text",""));
 
                         cardList.add(card);
                     } catch (JSONException e) {
@@ -107,7 +113,7 @@ public class MainActivity extends AppCompatActivity{
                 adapter.notifyDataSetChanged();
                 progressDialog.dismiss();
 
-                downloadImages();
+                setAllImagesUrl();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -120,55 +126,16 @@ public class MainActivity extends AppCompatActivity{
         requestQueue.add(jsonArrayRequest);
     }
 
-    // download all the images
-    public void downloadImages(){
+    // set all the images url
+    public void setAllImagesUrl(){
         progressDialog.setMessage("Loading...");
         progressDialog.show();
-        /*
-        // to get all the images of the cards
-        int index = 0;
-        for (Card card: cardList) {
-            downloadImage(card.getId(), index);
-            index++;
-        }*/
-        // to get the 100 firsts images of the cards
         for (int i = 0; i<cardList.size(); i++ ){
-            downloadImage(cardList.get(i).getId(), i);
+            final String imageUrl = "https://art.hearthstonejson.com/v1/render/latest/frFR/256x/" + cardList.get(i).getId()+ ".png";
+            cardList.get(i).setImage_url(imageUrl);
+            adapter.notifyDataSetChanged();
         }
-
         progressDialog.dismiss();
     }
 
-    // do a volley request to download an Image
-    public void downloadImage(final String cardId, final int cardIndex) {
-
-
-
-        //if (NetworkConnection.getConnection(this)) {
-
-            final String imageUrl = "https://art.hearthstonejson.com/v1/render/latest/frFR/256x/" + cardId + ".png";
-            cardList.get(cardIndex).setImage_url(imageUrl);
-            adapter.notifyDataSetChanged();
-
-
-        /*}else {
-            Toast.makeText(this, "No internet connectivity...", Toast.LENGTH_SHORT).show();
-        }*/
-
-    }
-
-    public void click(View view) {
-        Log.d("Main", "testclick");
-    }
-/*
-    public void clickDetailsAboutCard(View view) {
-        Intent intent = new Intent(this, CardDetails.class);
-        /*
-        EditText editText = (EditText) findViewById(R.id.editText);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-
-        startActivity(intent);
-    }
-    */
 }

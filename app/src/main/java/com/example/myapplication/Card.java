@@ -1,14 +1,15 @@
 package com.example.myapplication;
 
-import android.graphics.Bitmap;
-import android.widget.ImageView;
-
 import java.io.Serializable;
 
 public class Card implements Serializable {
     private String name;
     private String cardClass;
     private Integer cost;
+    private Integer attack;
+    private Integer health;
+    private String flavor;
+    private String text;
     private String rarity;
     private String id;
     private String image_url;
@@ -16,10 +17,14 @@ public class Card implements Serializable {
     public Card()  {
     }
 
-    public Card(String name, String cardClass, Integer cost, String rarity, String id, String image_url) {
+    public Card(String name, String cardClass, Integer cost, Integer attack, Integer health, String flavor, String text, String rarity, String id, String image_url) {
         this.name = name;
         this.cardClass = cardClass;
         this.cost = cost;
+        this.attack = attack;
+        this.health = health;
+        this.flavor = flavor;
+        this.text = text;
         this.rarity = rarity;
         this.id = id;
         this.image_url = image_url;
@@ -71,6 +76,38 @@ public class Card implements Serializable {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
+    }
+
+    public Integer getAttack() {
+        return attack;
+    }
+
+    public void setAttack(Integer attack) {
+        this.attack = attack;
+    }
+
+    public String getFlavor() {
+        return flavor;
+    }
+
+    public void setFlavor(String flavor) {
+        this.flavor = flavor;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Integer getHealth() {
+        return health;
+    }
+
+    public void setHealth(Integer health) {
+        this.health = health;
     }
 
     /*
