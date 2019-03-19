@@ -3,7 +3,9 @@ package com.example.myapplication;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
     private String name;
     private String cardClass;
     private Integer cost;
@@ -11,7 +13,7 @@ public class Card {
     private String id;
     private String image_url;
 
-    public Card() {
+    public Card()  {
     }
 
     public Card(String name, String cardClass, Integer cost, String rarity, String id, String image_url) {

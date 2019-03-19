@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Movie;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private Context context;
     private List<Card> list;
+
 
     public CardAdapter(Context context, List<Card> list) {
         this.context = context;
@@ -48,17 +51,47 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         return list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private static final String EXTRA_MESSAGE = "card";
+
         public TextView textID, textName, textClass, textCost;
         public ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(this);
+
             textID = itemView.findViewById(R.id.main_id);
             textName = itemView.findViewById(R.id.main_name);
             textClass = itemView.findViewById(R.id.main_class);
             textCost = itemView.findViewById(R.id.main_cost);
             imageView = itemView.findViewById(R.id.main_image);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d("mainActivity", "onClick position:" + getLayoutPosition() + "cardId:" + textID.getText().toString());
+            Intent intent = new Intent(context, CardDetails.class);
+
+            /*
+            *   getLayoutPosition()
+            *   or
+            *   getAdapterPosition()
+            *   ?
+             */
+
+            Card cardSelected = list.get(getLayoutPosition());
+
+            intent.putExtra(EXTRA_MESSAGE, cardSelected );
+
+            /*String message = textID.getText().toString();
+            intent.putExtra(EXTRA_MESSAGE, message);
+            */
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
     }
 

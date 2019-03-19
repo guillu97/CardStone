@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity{
     private RecyclerView mList;
 
     private GridLayoutManager gridLayoutManager;
-    private final int NUMBER_OF_COLUMN = 4;
+    private final int NUMBER_OF_COLUMN = 1;
     private DividerItemDecoration dividerItemDecoration;
     private List<Card> cardList;
     private RecyclerView.Adapter adapter;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity{
         progressDialog = new ProgressDialog(this);
 
         gridLayoutManager = new GridLayoutManager(this, NUMBER_OF_COLUMN);
-        gridLayoutManager.setOrientation(gridLayoutManager.VERTICAL);
+        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         dividerItemDecoration = new DividerItemDecoration(mList.getContext(), gridLayoutManager.getOrientation());
 
         mList.setHasFixedSize(false);
@@ -121,6 +122,8 @@ public class MainActivity extends AppCompatActivity{
 
     // download all the images
     public void downloadImages(){
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
         /*
         // to get all the images of the cards
         int index = 0;
@@ -129,9 +132,11 @@ public class MainActivity extends AppCompatActivity{
             index++;
         }*/
         // to get the 100 firsts images of the cards
-        for (int i = 0; i<100; i++ ){
+        for (int i = 0; i<cardList.size(); i++ ){
             downloadImage(cardList.get(i).getId(), i);
         }
+
+        progressDialog.dismiss();
     }
 
     // do a volley request to download an Image
@@ -140,16 +145,30 @@ public class MainActivity extends AppCompatActivity{
 
 
         //if (NetworkConnection.getConnection(this)) {
-            progressDialog.setMessage("Loading...");
-            progressDialog.show();
+
             final String imageUrl = "https://art.hearthstonejson.com/v1/render/latest/frFR/256x/" + cardId + ".png";
             cardList.get(cardIndex).setImage_url(imageUrl);
             adapter.notifyDataSetChanged();
-            progressDialog.dismiss();
+
 
         /*}else {
             Toast.makeText(this, "No internet connectivity...", Toast.LENGTH_SHORT).show();
         }*/
 
     }
+
+    public void click(View view) {
+        Log.d("Main", "testclick");
+    }
+/*
+    public void clickDetailsAboutCard(View view) {
+        Intent intent = new Intent(this, CardDetails.class);
+        /*
+        EditText editText = (EditText) findViewById(R.id.editText);
+        String message = editText.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, message);
+
+        startActivity(intent);
+    }
+    */
 }
