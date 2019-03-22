@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity{
         mList = findViewById(R.id.main_list);
 
         cardList = new ArrayList<>();
-        adapter = new CardAdapter(getApplicationContext(),cardList);
+        adapter = new CardAdapter(MainActivity.this,cardList);
 
         progressDialog = new ProgressDialog(this);
 
@@ -107,8 +107,10 @@ public class MainActivity extends AppCompatActivity{
                         cardText = cardText.replaceAll("\\<.*?\\>", "");
                         card.setText(cardText);
 
-                        final String imageUrl = "https://art.hearthstonejson.com/v1/render/latest/frFR/256x/" + card.getId() + ".png";
-                        card.setImage_url(imageUrl);
+                        final String imageUrl_256x = "https://art.hearthstonejson.com/v1/render/latest/frFR/256x/" + card.getId() + ".png";
+                        final String imageUrl_512x = "https://art.hearthstonejson.com/v1/render/latest/frFR/512x/" + card.getId() + ".png";
+                        card.setImage_url_256x(imageUrl_256x);
+                        card.setImage_url_512x(imageUrl_512x);
 
                         cardList.add(card);
                     } catch (JSONException e) {

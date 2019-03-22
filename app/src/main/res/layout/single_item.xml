@@ -8,6 +8,8 @@
     android:orientation="horizontal"
     android:padding="1dp">
 
+
+
     <ImageView
         android:id="@+id/main_image"
         android:layout_width="wrap_content"
@@ -20,10 +22,17 @@
         android:layout_marginBottom="8dp"
         android:contentDescription="Image Loading" />
 
+    <!--com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/main_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/-->
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+
 
         <TextView
             android:id="@+id/main_name"
