@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
-
+/*
     private RecyclerView mList;
 
     private GridLayoutManager gridLayoutManager;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity{
     private ProgressDialog progressDialog;
 
     private String url = "https://api.hearthstonejson.com/v1/25770/frFR/cards.collectible.json";
-
+*/
 
     public MainActivity() {
     }
@@ -62,28 +62,13 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*mList = findViewById(R.id.main_list);
-
-        cardList = new ArrayList<>();
-        adapter = new CardAdapter(getApplicationContext(),cardList);
-
-        progressDialog = new ProgressDialog(this);
-
-        gridLayoutManager = new GridLayoutManager(this, NUMBER_OF_COLUMN);
-        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
-        dividerItemDecoration = new DividerItemDecoration(mList.getContext(), gridLayoutManager.getOrientation());
-
-        mList.setHasFixedSize(false);
-        mList.setLayoutManager(gridLayoutManager);
-        mList.addItemDecoration(dividerItemDecoration);
-        mList.setAdapter(adapter);
-
-        requestQueue = Volley.newRequestQueue(this);
-
-        getData();*/
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView); // Barre de menu
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+
+        if (savedInstanceState == null) {
+            bottomNav.setSelectedItemId(R.id.nav_home); // change to whichever id should be default
+        }
     }
 
     // react to click on item
@@ -110,56 +95,4 @@ public class MainActivity extends AppCompatActivity{
                     return true;
                 }
             };
-
-    private void getData() {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading...");
-        progressDialog.show();
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        JSONObject jsonObject = response.getJSONObject(i);
-
-                        Card card = new Card();
-                        card.setId(jsonObject.optString("id","no id"));
-                        card.setName(jsonObject.optString("name","no name"));
-                        card.setCardClass(jsonObject.optString("cardClass",""));
-
-                        card.setCost(jsonObject.optInt("cost",0));
-                        card.setAttack(jsonObject.optInt("attack",0));
-                        card.setHealth(jsonObject.optInt("health",0));
-
-                        card.setFlavor(jsonObject.optString("flavor",""));
-                        String cardText = jsonObject.optString("text","");
-                        cardText = cardText.replaceAll("\\<.*?\\>", "");
-                        card.setText(cardText);
-
-                        final String imageUrl = "https://art.hearthstonejson.com/v1/render/latest/frFR/256x/" + card.getId() + ".png";
-                        card.setImage_url(imageUrl);
-
-                        cardList.add(card);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        progressDialog.dismiss();
-                    }
-                }
-                adapter.notifyDataSetChanged();
-                progressDialog.dismiss();
-
-                //setAllImagesUrl();
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Volley", error.toString());
-                progressDialog.dismiss();
-            }
-        });
-        requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(jsonArrayRequest);
-    }
 }
