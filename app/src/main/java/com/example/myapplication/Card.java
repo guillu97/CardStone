@@ -14,11 +14,12 @@ public class Card implements Serializable {
     private String id;
     private String image_url_256x;
     private String image_url_512x;
+    private boolean saved;
 
     public Card()  {
     }
 
-    public Card(String name, String cardClass, Integer cost, Integer attack, Integer health, String flavor, String cardText, String rarity, String id, String image_url_256x, String image_url_512x) {
+    public Card(String name, String cardClass, Integer cost, Integer attack, Integer health, String flavor, String cardText, String rarity, String id, String image_url_256x, String image_url_512x, boolean saved) {
         this.name = name;
         this.cardClass = cardClass;
         this.cost = cost;
@@ -30,6 +31,7 @@ public class Card implements Serializable {
         this.id = id;
         this.image_url_256x = image_url_256x;
         this.image_url_512x = image_url_512x;
+        this.saved = saved;
     }
 
     public String getName() {
@@ -120,6 +122,14 @@ public class Card implements Serializable {
 
     public void setImage_url_512x(String image_url_512x) {
         this.image_url_512x = image_url_512x;
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 
     /*
