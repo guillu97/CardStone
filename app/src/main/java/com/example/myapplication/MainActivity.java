@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*mList = findViewById(R.id.main_list);
+        mList = findViewById(R.id.main_list);
 
         cardList = new ArrayList<>();
         adapter = new CardAdapter(MainActivity.this,cardList);
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity{
 
         requestQueue = Volley.newRequestQueue(this);
 
-        getData();*/
+        getData();
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView); // Barre de menu
         bottomNav.setOnNavigationItemSelectedListener(navListener);
