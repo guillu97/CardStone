@@ -65,6 +65,10 @@ public class MainActivity extends AppCompatActivity{
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView); // Barre de menu
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+
+        if (savedInstanceState == null) {
+            bottomNav.setSelectedItemId(R.id.nav_home); // change to whichever id should be default
+        }
     }
 
     // react to click on item
