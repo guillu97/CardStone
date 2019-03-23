@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,11 +10,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,7 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements Filterable {
 
     private Context context;
 
@@ -38,10 +43,13 @@ public class SearchFragment extends Fragment {
     private final int NUMBER_OF_COLUMN = 1;
     private DividerItemDecoration dividerItemDecoration;
     private List<Card> cardList;
+    private List<Card> cardListFiltered;
     private RecyclerView.Adapter adapter;
     ImageView imageView;
     RequestQueue requestQueue;
     private ProgressDialog progressDialog;
+
+    private SearchView searchView;
 
     private String url = "https://api.hearthstonejson.com/v1/25770/frFR/cards.collectible.json";
 
@@ -54,10 +62,22 @@ public class SearchFragment extends Fragment {
 
         mList = currentView.findViewById(R.id.main_list_in_fragment);
 
-        cardList = new ArrayList<>();
-        adapter = new CardAdapter(context,cardList);
-
         progressDialog = new ProgressDialog(context);
+
+
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+
+        cardList = new ArrayList<>();
+        getData();
+        cardListFiltered = cardList;
+
+        progressDialog.dismiss();
+
+        adapter = new CardAdapter(context,cardListFiltered);
+
+
+
 
         gridLayoutManager = new GridLayoutManager(context, NUMBER_OF_COLUMN);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
@@ -70,7 +90,28 @@ public class SearchFragment extends Fragment {
 
         requestQueue = Volley.newRequestQueue(context);
 
-        getData();
+
+
+
+
+
+        searchView = currentView.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("SearchFragment","onQueryTextSubmit");
+                getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                Log.d("SearchFragment","onQueryTextChange");
+                getFilter().filter(query);
+                return false;
+            }
+        });
+
         return currentView;
     }
 
@@ -126,5 +167,48 @@ public class SearchFragment extends Fragment {
         });
         requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(jsonArrayRequest);
+    }
+
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    ((CardAdapter) adapter).list = cardList;
+                } else {
+                    Log.d("SearchFragment","charSequence in getfilter:" + charSequence);
+                    List<Card> filteredList = new ArrayList<>();
+                    for (Card card: cardList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (card.getName().toLowerCase().contains(charString.toLowerCase()) /*|| row.getPhone().contains(charSequence) */) {
+                            Log.d("SearchFragment","card added in filteredList:" + card.getName());
+                            filteredList.add(card);
+                        }
+                    }
+
+                    cardListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = cardListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                Log.d("SearchFragment","publishResults");
+                ((CardAdapter) adapter).list = (ArrayList<Card>) filterResults.values;
+                for(Card card : ((CardAdapter) adapter).list){
+                    Log.d("SearchFragment","cardListFiltered:" + card.getName());
+                }
+                adapter.notifyDataSetChanged();
+
+            }
+        };
     }
 }

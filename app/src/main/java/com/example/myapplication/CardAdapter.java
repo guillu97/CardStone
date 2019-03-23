@@ -16,10 +16,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
-
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -28,7 +29,8 @@ import java.util.List;
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private Context context;
-    private List<Card> list;
+    public List<Card> list;
+
 
 
     public CardAdapter(Context context, List<Card> list) {
@@ -84,6 +86,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 Picasso.with(context).load(list.get(position).getImage_url_512x()).into(photoView);
 
 
+
                 /*
                 //to add a button on the dialog
                 alertadd.setNeutralButton("Close", new DialogInterface.OnClickListener() {
@@ -92,6 +95,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                     }
                 });
                 */
+
 
             alertadd.show();
             }
@@ -127,6 +131,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             imageView = itemView.findViewById(R.id.main_image);
         }
     }
+
 }
 
 /*
