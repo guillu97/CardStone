@@ -4,7 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Movie;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -16,11 +20,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -38,6 +41,40 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         this.list = list;
     }
 
+    /*
+    *
+    *   VIEW HOLDER CLASS
+    *
+    * */
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        private static final String EXTRA_MESSAGE = "card";
+
+        public ConstraintLayout layout;
+        public TextView textID, textName, textClass, textCost, textFlavor, textDescription;
+        public ImageView imageView, imageSaved;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            layout = itemView.findViewById(R.id.ConstrainLayout);
+            textID = itemView.findViewById(R.id.main_id);
+            textName = itemView.findViewById(R.id.main_name);
+            textClass = itemView.findViewById(R.id.main_class);
+            textCost = itemView.findViewById(R.id.main_cost);
+            textFlavor = itemView.findViewById(R.id.main_flavor);
+            textDescription = itemView.findViewById(R.id.main_description);
+
+            imageSaved = itemView.findViewById(R.id.main_saved);
+            imageView = itemView.findViewById(R.id.main_image);
+        }
+    }
+
+    /*
+    *
+    *   CREATE A VIEW HOLDER
+    *
+    * */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.single_item, parent, false);
@@ -54,13 +91,21 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         holder.textCost.setText(String.valueOf(card.getCost()));
         holder.textFlavor.setText(card.getFlavor());
         holder.textDescription.setText(card.getCardText());
+
+
+        holder.imageSaved.setImageResource(R.drawable.hearts);
+
+        if (!card.isSaved()){
+            holder.imageSaved.setImageAlpha(100);
+        }
+
         //holder.imageView.setImageBitmap(card.getBitmap());
 
         // download the image from the image_url for the images in the list
         Picasso.with(context).load(card.getImage_url_256x()).into(holder.imageView);
 
         // on click of the linear layout of a card item in the list
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+        holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("mainActivity", "onClick position:" + position + "cardId:" + list.get(position).getId());
@@ -86,7 +131,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 Picasso.with(context).load(list.get(position).getImage_url_512x()).into(photoView);
 
 
-
                 /*
                 //to add a button on the dialog
                 alertadd.setNeutralButton("Close", new DialogInterface.OnClickListener() {
@@ -95,7 +139,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                     }
                 });
                 */
-
 
             alertadd.show();
             }
@@ -108,30 +151,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     public int getItemCount() {
         return list.size();
     }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        private static final String EXTRA_MESSAGE = "card";
-
-        public LinearLayout linearLayout;
-        public TextView textID, textName, textClass, textCost, textFlavor, textDescription;
-        public ImageView imageView;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            linearLayout = itemView.findViewById(R.id.linearLayout);
-            textID = itemView.findViewById(R.id.main_id);
-            textName = itemView.findViewById(R.id.main_name);
-            textClass = itemView.findViewById(R.id.main_class);
-            textCost = itemView.findViewById(R.id.main_cost);
-            textFlavor = itemView.findViewById(R.id.main_flavor);
-            textDescription = itemView.findViewById(R.id.main_description);
-
-            imageView = itemView.findViewById(R.id.main_image);
-        }
-    }
-
 }
 
 /*

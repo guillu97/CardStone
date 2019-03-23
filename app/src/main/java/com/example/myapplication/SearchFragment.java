@@ -146,6 +146,8 @@ public class SearchFragment extends Fragment implements Filterable {
                         card.setImage_url_256x(imageUrl_256x);
                         card.setImage_url_512x(imageUrl_512x);
 
+                        card.setSaved(false);
+
                         cardList.add(card);
                     } catch (JSONException e) {
                         e.printStackTrace();
