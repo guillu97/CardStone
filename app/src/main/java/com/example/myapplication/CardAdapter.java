@@ -1,31 +1,17 @@
 package com.example.myapplication;
-
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Movie;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.github.chrisbanes.photoview.PhotoViewAttacher;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 
@@ -33,7 +19,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private Context context;
     private List<Card> list;
-
 
     public CardAdapter(Context context, List<Card> list) {
         this.context = context;
@@ -56,7 +41,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
 
+            /* LAYOUT */
             layout = itemView.findViewById(R.id.ConstrainLayout);
+
+            /* TEXT */
             textID = itemView.findViewById(R.id.main_id);
             textName = itemView.findViewById(R.id.main_name);
             textClass = itemView.findViewById(R.id.main_class);
@@ -64,6 +52,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             textFlavor = itemView.findViewById(R.id.main_flavor);
             textDescription = itemView.findViewById(R.id.main_description);
 
+            /* IMAGES */
             imageSaved = itemView.findViewById(R.id.main_saved);
             imageView = itemView.findViewById(R.id.main_image);
         }
@@ -81,7 +70,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         Card card = list.get(position);
 
         holder.textID.setText(String.valueOf(card.getId()));
@@ -91,9 +80,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         holder.textFlavor.setText(card.getFlavor());
         holder.textDescription.setText(card.getCardText());
 
-
         holder.imageSaved.setImageResource(R.drawable.hearts);
-
         if (!card.isSaved()){
             holder.imageSaved.setImageAlpha(100);
         }
@@ -104,20 +91,23 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         Picasso.with(context).load(card.getImage_url_256x()).into(holder.imageView);
 
         // on click of the linear layout of a card item in the list
-        holder.layout.setOnClickListener(new View.OnClickListener() {
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("mainActivity", "onClick position:" + position + "cardId:" + list.get(position).getId());
 
+                /*
+                *   Creation of an alert Dialog to print the card in full size
+                * */
                 AlertDialog.Builder alertadd = new AlertDialog.Builder(context, R.style.DialogCustomTheme);
                 LayoutInflater factory = LayoutInflater.from(context);
                 final View view = factory.inflate(R.layout.card_inflate, null);
 
                 alertadd.setNegativeButton("X", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
                 alertadd.setView(view);
 
                 //ImageView imgView = view.findViewById(R.id.image_view_details);
@@ -125,10 +115,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 PhotoView photoView = view.findViewById(R.id.photo_view);
                 //photoView.
 
-
                 // download the image from the image_url for the image in the dialog
                 Picasso.with(context).load(list.get(position).getImage_url_512x()).into(photoView);
-
 
                 /*
                 //to add a button on the dialog
@@ -138,12 +126,24 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                     }
                 });
                 */
-
-            alertadd.show();
+                alertadd.show();
             }
         });
 
-
+        holder.imageSaved.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //TODO ajouter dans la table
+                if(list.get(position).isSaved()) {
+                    list.get(position).setSaved(false);
+                    holder.imageSaved.setImageAlpha(100);
+                }
+                else{
+                    list.get(position).setSaved(true);
+                    holder.imageSaved.setImageAlpha(500);
+                }
+            }
+        });
     }
 
     @Override
@@ -151,27 +151,3 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         return list.size();
     }
 }
-
-/*
-    // code to create a new intent from the recycler view and send the card through extra message
-
-            Intent intent = new Intent(context, CardDetails.class);
-
-            /*
-            *   getLayoutPosition()
-            *   or
-            *   getAdapterPosition()
-            *   ?
-
-
-            Card cardSelected = list.get(getLayoutPosition());
-
-            intent.putExtra(EXTRA_MESSAGE, cardSelected );
-
-            /*String message = textID.getText().toString();
-            intent.putExtra(EXTRA_MESSAGE, message);
-
-
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
- */
