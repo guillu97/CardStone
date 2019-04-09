@@ -5,8 +5,14 @@
     android:background= "#00000000"
     android:id="@+id/card_inflate_layout"
     >
-    <com.github.chrisbanes.photoview.PhotoView
+    <!--com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/photo_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        /-->
+    <ImageView
+        android:id="@+id/image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"

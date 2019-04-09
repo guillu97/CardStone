@@ -142,7 +142,7 @@ public class SearchFragment extends Fragment implements Filterable {
                         card.setText(cardText);
 
                         final String imageUrl_256x = "https://art.hearthstonejson.com/v1/render/latest/frFR/256x/" + card.getId() + ".png";
-                        final String imageUrl_512x = "https://art.hearthstonejson.com/v1/render/latest/frFR/512x/" + card.getId() + ".png";
+                        final String imageUrl_512x = "http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/" + card.getId() + "_premium.gif";
                         card.setImage_url_256x(imageUrl_256x);
                         card.setImage_url_512x(imageUrl_512x);
 

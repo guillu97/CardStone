@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
@@ -102,7 +104,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         //holder.imageView.setImageBitmap(card.getBitmap());
 
         // download the image from the image_url for the images in the list
-        Picasso.with(context).load(card.getImage_url_256x()).into(holder.imageView);
+        //Picasso.with(context).load(card.getImage_url_256x()).into(holder.imageView);
+        Glide.with(context).asGif().load(list.get(position).getImage_url_512x()).into(holder.imageView);
 
         // on click of the linear layout of a card item in the list
         holder.layout.setOnClickListener(new View.OnClickListener() {
@@ -122,13 +125,16 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 alertadd.setView(view);
 
                 //ImageView imgView = view.findViewById(R.id.image_view_details);
-                //ImageView img = new ImageView(imageView);
-                PhotoView photoView = view.findViewById(R.id.photo_view);
-                //photoView.
+               //ImageView img = new ImageView(imageView);
 
+                //photoView.
+                //PhotoView photoView = view.findViewById(R.id.photo_view);
+
+                ImageView imageView = view.findViewById(R.id.image_view);
+                Glide.with(context).asGif().load(list.get(position).getImage_url_512x()).into(imageView);
 
                 // download the image from the image_url for the image in the dialog
-                Picasso.with(context).load(list.get(position).getImage_url_512x()).into(photoView);
+                //Picasso.with(context).load(list.get(position).getImage_url_512x()).into(photoView);
 
 
                 /*
