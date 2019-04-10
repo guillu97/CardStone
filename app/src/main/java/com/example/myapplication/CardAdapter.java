@@ -3,7 +3,6 @@ package com.example.myapplication;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AlertDialog;
@@ -16,11 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -73,7 +67,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     * */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.single_item, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.single_card, parent, false);
         return new ViewHolder(v);
     }
 
@@ -101,10 +95,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         circularProgressDrawable.setCenterRadius(30f);
         circularProgressDrawable.start();
         // download the image from the image_url for the images in the list
-        Glide.with(context).load(list.get(position).getImage_url_256x()).placeholder(circularProgressDrawable).into(holder.imageView);
+        Glide.with(context).load(list.get(position).getImage_url()).placeholder(circularProgressDrawable).into(holder.imageView);
 
         // on click of the linear layout of a card item in the list
-        holder.layout.setOnClickListener(new View.OnClickListener() {
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("mainActivity", "onClick position:" + position + "cardId:" + list.get(position).getId());
@@ -133,7 +127,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 circularProgressDrawable.start();
 
                 // downloading the gif
-                Glide.with(context).asGif().load(list.get(position).getimage_url_gif()).placeholder(circularProgressDrawable).into(imageView);
+                Glide.with(context).asGif().load(list.get(position).getGif_url()).placeholder(circularProgressDrawable).into(imageView);
 
             alertadd.show();
             }

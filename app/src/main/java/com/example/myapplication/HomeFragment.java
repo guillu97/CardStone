@@ -46,11 +46,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // create the inflater view
         mView = inflater.inflate(R.layout.fragment_home, container, false);
 
+
         // get the linearLayout wich is our all cards button
-        LinearLayout clickableLayoutAllCards = mView.findViewById(R.id.clickableLayoutAllCards);
+        LinearLayout clickableLayoutAllCards = mView.findViewById(R.id.clickable_layout_all_cards);
+        // get the linearLayout wich is our back cards button
+        LinearLayout clickableLayoutBackCards = mView.findViewById(R.id.clickable_layout_back_cards);
+
         // set the click listener of the linear layout this (which implement the onClickListener interface)
         // then in the onClick we will do the clicks event for each layout
         clickableLayoutAllCards.setOnClickListener(this);
+        clickableLayoutBackCards.setOnClickListener(this);
 
         return mView;
     }
@@ -60,15 +65,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // what did the user clicked ?
         switch (view.getId()) {
             // the case where he has clicked on the linear layout wich is our button to get to all the cards
-            case R.id.clickableLayoutAllCards:
+            case R.id.clickable_layout_all_cards:
                 BottomNavigationView bottomNavigationView;
-                if(getActivity() != null){
+                if (getActivity() != null) {
                     bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
                     bottomNavigationView.setSelectedItemId(R.id.nav_search);
                 }
                 if (getFragmentManager() != null) {
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SearchFragment()).commit();
                 }
+                break;
+            case R.id.clickable_layout_back_cards:
+                if (getFragmentManager() != null)
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, new BackCardFragment()).commit();
                 break;
             default:
                 break;

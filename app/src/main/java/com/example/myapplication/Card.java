@@ -12,14 +12,14 @@ public class Card implements Serializable {
     private String cardText;
     private String rarity;
     private String id;
-    private String image_url_256x;
-    private String image_url_gif;
+    private String image_url;
+    private String gif_url;
     private boolean saved;
 
     public Card()  {
     }
 
-    public Card(String name, String cardClass, Integer cost, Integer attack, Integer health, String flavor, String cardText, String rarity, String id, String image_url_256x, String image_url_gif, boolean saved) {
+    public Card(String name, String cardClass, Integer cost, Integer attack, Integer health, String flavor, String cardText, String rarity, String id, String image_url, String gif_url, boolean saved) {
         this.name = name;
         this.cardClass = cardClass;
         this.cost = cost;
@@ -29,8 +29,8 @@ public class Card implements Serializable {
         this.cardText = cardText;
         this.rarity = rarity;
         this.id = id;
-        this.image_url_256x = image_url_256x;
-        this.image_url_gif = image_url_gif;
+        this.image_url = image_url;
+        this.gif_url = gif_url;
         this.saved = saved;
     }
 
@@ -108,20 +108,20 @@ public class Card implements Serializable {
         this.health = health;
     }
 
-    public String getImage_url_256x() {
-        return image_url_256x;
+    public String getImage_url() {
+        return image_url;
     }
 
-    public void setImage_url_256x(String image_url_256x) {
-        this.image_url_256x = image_url_256x;
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
-    public String getimage_url_gif() {
-        return image_url_gif;
+    public String getGif_url() {
+        return gif_url;
     }
 
-    public void setimage_url_gif(String image_url_gif) {
-        this.image_url_gif = image_url_gif;
+    public void setGif_url(String gif_url) {
+        this.gif_url = gif_url;
     }
 
     public boolean isSaved() {

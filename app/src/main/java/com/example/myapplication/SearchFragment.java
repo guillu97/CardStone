@@ -49,7 +49,7 @@ public class SearchFragment extends Fragment implements Filterable {
 
     private SearchView searchView;
 
-    private String url = "https://api.hearthstonejson.com/v1/25770/enUS/cards.collectible.json";
+    private String url = "https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json";
 
     private String url_image_256x = "https://art.hearthstonejson.com/v1/render/latest/enUS/256x/";
 
@@ -144,9 +144,9 @@ public class SearchFragment extends Fragment implements Filterable {
                         card.setText(cardText);
 
                         final String imageUrl_256x = url_image_256x  + card.getId() + ".png";
-                        final String image_url_gif = url_gif + card.getId() + "_premium.gif";
-                        card.setImage_url_256x(imageUrl_256x);
-                        card.setimage_url_gif(image_url_gif);
+                        final String gif_url = url_gif + card.getId() + "_premium.gif";
+                        card.setImage_url(imageUrl_256x);
+                        card.setGif_url(gif_url);
 
                         card.setSaved(false);
 

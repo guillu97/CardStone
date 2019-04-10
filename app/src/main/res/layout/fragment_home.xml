@@ -42,7 +42,7 @@
                 android:layout_margin="10dp">
 
                 <LinearLayout
-                    android:id="@+id/clickableLayoutAllCards"
+                    android:id="@+id/clickable_layout_all_cards"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -107,6 +107,7 @@
                 android:layout_margin="10dp">
 
                 <LinearLayout
+                    android:id="@+id/clickable_layout_back_cards"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
