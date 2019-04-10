@@ -2,7 +2,10 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -87,11 +95,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             holder.imageSaved.setImageAlpha(100);
         }
 
-        //holder.imageView.setImageBitmap(card.getBitmap());
-
+        // the circular bar to wait until the image is downloaded
+        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);
+        circularProgressDrawable.setStrokeWidth(5f);
+        circularProgressDrawable.setCenterRadius(30f);
+        circularProgressDrawable.start();
         // download the image from the image_url for the images in the list
-        //Picasso.with(context).load(card.getImage_url_256x()).into(holder.imageView);
-        Glide.with(context).asGif().load(list.get(position).getImage_url_512x()).into(holder.imageView);
+        Glide.with(context).load(list.get(position).getImage_url_256x()).placeholder(circularProgressDrawable).into(holder.imageView);
 
         // on click of the linear layout of a card item in the list
         holder.layout.setOnClickListener(new View.OnClickListener() {
@@ -110,27 +120,20 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                         });
                 alertadd.setView(view);
 
-                //ImageView imgView = view.findViewById(R.id.image_view_details);
-               //ImageView img = new ImageView(imageView);
 
-                //photoView.
-                //PhotoView photoView = view.findViewById(R.id.photo_view);
-
+                // the image view on the xml file
                 ImageView imageView = view.findViewById(R.id.image_view);
-                Glide.with(context).asGif().load(list.get(position).getImage_url_512x()).into(imageView);
-
-                // download the image from the image_url for the image in the dialog
-                //Picasso.with(context).load(list.get(position).getImage_url_512x()).into(photoView);
 
 
-                /*
-                //to add a button on the dialog
-                alertadd.setNeutralButton("Close", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dlg, int sumthin) {
+                // the circular bar to wait until the image is downloaded
+                CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);
+                circularProgressDrawable.setColorSchemeColors(Color.WHITE);
+                circularProgressDrawable.setStrokeWidth(30f);
+                circularProgressDrawable.setCenterRadius(50f);
+                circularProgressDrawable.start();
 
-                    }
-                });
-                */
+                // downloading the gif
+                Glide.with(context).asGif().load(list.get(position).getimage_url_gif()).placeholder(circularProgressDrawable).into(imageView);
 
             alertadd.show();
             }
