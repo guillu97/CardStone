@@ -1,8 +1,7 @@
 package com.example.myapplication;
-
+import android.graphics.Color;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AlertDialog;
@@ -13,17 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-
+import com.github.chrisbanes.photoview.PhotoView;
+import com.squareup.picasso.Picasso;
 import java.util.List;
+import com.bumptech.glide.Glide;
 
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private Context context;
     public List<Card> list;
-
 
 
     public CardAdapter(Context context, List<Card> list) {
@@ -47,7 +45,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
 
+            /* LAYOUT */
             layout = itemView.findViewById(R.id.ConstrainLayout);
+
+            /* TEXT */
             textID = itemView.findViewById(R.id.main_id);
             textName = itemView.findViewById(R.id.main_name);
             textClass = itemView.findViewById(R.id.main_class);
@@ -55,6 +56,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             textFlavor = itemView.findViewById(R.id.main_flavor);
             textDescription = itemView.findViewById(R.id.main_description);
 
+            /* IMAGES */
             imageSaved = itemView.findViewById(R.id.main_saved);
             imageView = itemView.findViewById(R.id.main_image);
         }
@@ -82,9 +84,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         holder.textFlavor.setText(card.getFlavor());
         holder.textDescription.setText(card.getCardText());
 
-
         holder.imageSaved.setImageResource(R.drawable.hearts);
-
         if (!card.isSaved()){
             holder.imageSaved.setImageAlpha(100);
         }
@@ -103,17 +103,24 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             public void onClick(View v) {
                 Log.d("mainActivity", "onClick position:" + position + "cardId:" + list.get(position).getId());
 
+                /*
+                *   Creation of an alert Dialog to print the card in full size
+                * */
                 AlertDialog.Builder alertadd = new AlertDialog.Builder(context, R.style.DialogCustomTheme);
                 LayoutInflater factory = LayoutInflater.from(context);
                 final View view = factory.inflate(R.layout.card_inflate, null);
 
                 alertadd.setNegativeButton("X", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
                 alertadd.setView(view);
 
+                //ImageView imgView = view.findViewById(R.id.image_view_details);
+                //ImageView img = new ImageView(imageView);
+                //PhotoView photoView = view.findViewById(R.id.photo_view);
+                //photoView.
 
                 // the image view on the xml file
                 ImageView imageView = view.findViewById(R.id.image_view);
@@ -133,7 +140,20 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             }
         });
 
-
+        holder.imageSaved.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //TODO ajouter dans la table
+                if(list.get(position).isSaved()) {
+                    list.get(position).setSaved(false);
+                    holder.imageSaved.setImageAlpha(100);
+                }
+                else{
+                    list.get(position).setSaved(true);
+                    holder.imageSaved.setImageAlpha(500);
+                }
+            }
+        });
     }
 
     @Override

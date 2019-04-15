@@ -43,6 +43,7 @@ public class SearchFragment extends Fragment implements Filterable {
     private List<Card> cardList;
     private List<Card> cardListFiltered;
     private RecyclerView.Adapter adapter;
+    private RecyclerView.Adapter savedAdapter;
     ImageView imageView;
     RequestQueue requestQueue;
     private ProgressDialog progressDialog;
@@ -60,7 +61,7 @@ public class SearchFragment extends Fragment implements Filterable {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View currentView = inflater.inflate(R.layout.fragment_search, container,false );
-        context = getContext();
+        context = getContext(); // get fragment and activity
 
         mList = currentView.findViewById(R.id.main_list_in_fragment);
 
@@ -77,9 +78,7 @@ public class SearchFragment extends Fragment implements Filterable {
         progressDialog.dismiss();
 
         adapter = new CardAdapter(context,cardListFiltered);
-
-
-
+        savedAdapter = new CardAdapter(context,cardList);
 
         gridLayoutManager = new GridLayoutManager(context, NUMBER_OF_COLUMN);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
