@@ -2,8 +2,6 @@ package com.example.myapplication;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,15 +18,10 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -36,12 +29,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class BackCardFragment extends Fragment implements Filterable {
-
+public class HeroesFragment extends Fragment  implements Filterable {
     private Context context;
 
     private RecyclerView mList;
@@ -49,8 +39,7 @@ public class BackCardFragment extends Fragment implements Filterable {
     private GridLayoutManager gridLayoutManager;
     private final int NUMBER_OF_COLUMN = 1;
     private DividerItemDecoration dividerItemDecoration;
-    private List<BackCard> backCardList;
-
+    private List<Card> cardList;
     private RecyclerView.Adapter adapter;
     ImageView imageView;
     RequestQueue requestQueue;
@@ -58,18 +47,25 @@ public class BackCardFragment extends Fragment implements Filterable {
 
     private SearchView searchView;
 
-    private String url = "https://omgvamp-hearthstone-v1.p.rapidapi.com/cardbacks";
+    private List<Card> cardListFiltered;
 
-    private List<BackCard> backCardListFiltered;
+
+    private String url = "https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json";
+
+    private String url_image_256x = "https://art.hearthstonejson.com/v1/render/latest/enUS/256x/";
+
+    private String url_image_512x = "https://art.hearthstonejson.com/v1/render/latest/enUS/512x/";
+
+    private String url_gif = "http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View currentView = inflater.inflate(R.layout.fragment_back_cards, container,false );
+        View currentView = inflater.inflate(R.layout.fragment_search, container,false );
         context = getContext();
 
-        mList = currentView.findViewById(R.id.back_card_list_in_fragment);
+        mList = currentView.findViewById(R.id.main_list_in_fragment);
 
         progressDialog = new ProgressDialog(context);
 
@@ -77,14 +73,13 @@ public class BackCardFragment extends Fragment implements Filterable {
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
-        backCardList = new ArrayList<>();
+        cardList = new ArrayList<>();
         getData();
-        backCardListFiltered = backCardList;
+        cardListFiltered = cardList;
 
         progressDialog.dismiss();
 
-        adapter = new BackCardAdapter(context,backCardListFiltered);
-
+        adapter = new HeroesCardAdapter(context,cardListFiltered);
 
 
 
@@ -97,9 +92,8 @@ public class BackCardFragment extends Fragment implements Filterable {
         mList.addItemDecoration(dividerItemDecoration);
         mList.setAdapter(adapter);
 
-
-
         requestQueue = Volley.newRequestQueue(context);
+
 
         searchView = currentView.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -127,7 +121,6 @@ public class BackCardFragment extends Fragment implements Filterable {
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
-
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -135,16 +128,25 @@ public class BackCardFragment extends Fragment implements Filterable {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
 
-                        final BackCard backCard = new BackCard();
-                        backCard.setId(jsonObject.optString("cardBackId","no id"));
-                        backCard.setName(jsonObject.optString("name","no name"));
-                        backCard.setDescription(jsonObject.optString("description","no description"));
-                        backCard.setImage_url(jsonObject.optString("img","no image"));
-                        backCard.setGif_url(jsonObject.optString("imgAnimated","no image animated"));
+                        String type = jsonObject.optString("type", "");
+                        if(type.equals("HERO")) {
 
-                        backCardList.add(backCard);
+                            Card card = new Card();
+                            card.setId(jsonObject.optString("id", "no id"));
+                            card.setName(jsonObject.optString("name", "no name"));
+                            card.setCardClass(jsonObject.optString("cardClass", ""));
 
+                            final String imageUrl_256x = url_image_256x + card.getId() + ".png";
+                            final String imageUrl_512x = url_image_512x + card.getId() + ".png";
+                            final String gif_url = url_gif + card.getId() + "_premium.gif";
+                            card.setImage_url(imageUrl_256x);
+                            card.setImage_url_512(imageUrl_512x);
+                            card.setGif_url(gif_url);
 
+                            card.setSaved(false);
+
+                            cardList.add(card);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                         progressDialog.dismiss();
@@ -162,17 +164,7 @@ public class BackCardFragment extends Fragment implements Filterable {
                 Log.e("Volley", error.toString());
                 progressDialog.dismiss();
             }
-        }){
-            /** Passing some request headers* */
-            @Override
-            public Map getHeaders() throws AuthFailureError {
-                HashMap headers = new HashMap();
-                headers.put("Content-Type", "application/json");
-                headers.put("X-RapidAPI-Host", "omgvamp-hearthstone-v1.p.rapidapi.com");
-                headers.put("X-RapidAPI-Key", "940c7dabdemsh8f6ba49836208d5p177889jsndf691d05c393");
-                return headers;
-            }
-        };
+        });
         requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(jsonArrayRequest);
     }
@@ -184,11 +176,11 @@ public class BackCardFragment extends Fragment implements Filterable {
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
                 if (charString.isEmpty()) {
-                    ((BackCardAdapter) adapter).list = backCardList;
+                    ((CardAdapter) adapter).list = cardList;
                 } else {
                     Log.d("SearchFragment","charSequence in getfilter:" + charSequence);
-                    List<BackCard> filteredList = new ArrayList<>();
-                    for (BackCard card: backCardList) {
+                    List<Card> filteredList = new ArrayList<>();
+                    for (Card card: cardList) {
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
@@ -198,19 +190,19 @@ public class BackCardFragment extends Fragment implements Filterable {
                         }
                     }
 
-                    backCardListFiltered = filteredList;
+                    cardListFiltered = filteredList;
                 }
 
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = backCardListFiltered;
+                filterResults.values = cardListFiltered;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 Log.d("SearchFragment","publishResults");
-                ((BackCardAdapter) adapter).list = (ArrayList<BackCard>) filterResults.values;
-                for(BackCard card : ((BackCardAdapter) adapter).list){
+                ((CardAdapter) adapter).list = (ArrayList<Card>) filterResults.values;
+                for(Card card : ((CardAdapter) adapter).list){
                     Log.d("SearchFragment","cardListFiltered:" + card.getName());
                 }
                 adapter.notifyDataSetChanged();

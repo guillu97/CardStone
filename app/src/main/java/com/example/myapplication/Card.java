@@ -13,13 +13,16 @@ public class Card implements Serializable {
     private String rarity;
     private String id;
     private String image_url;
+    private String image_url_512;
     private String gif_url;
     private boolean saved;
+    private String type;
+
 
     public Card()  {
     }
 
-    public Card(String name, String cardClass, Integer cost, Integer attack, Integer health, String flavor, String cardText, String rarity, String id, String image_url, String gif_url, boolean saved) {
+    public Card(String name, String cardClass, Integer cost, Integer attack, Integer health, String flavor, String cardText, String rarity, String id, String image_url, String image_url_512, String gif_url, boolean saved, String type) {
         this.name = name;
         this.cardClass = cardClass;
         this.cost = cost;
@@ -30,8 +33,10 @@ public class Card implements Serializable {
         this.rarity = rarity;
         this.id = id;
         this.image_url = image_url;
+        this.image_url_512 = image_url_512;
         this.gif_url = gif_url;
         this.saved = saved;
+        this.type = type;
     }
 
     public String getName() {
@@ -130,6 +135,22 @@ public class Card implements Serializable {
 
     public void setSaved(boolean saved) {
         this.saved = saved;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getImage_url_512() {
+        return image_url_512;
+    }
+
+    public void setImage_url_512(String image_url_512) {
+        this.image_url_512 = image_url_512;
     }
 
     /*
