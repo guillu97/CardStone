@@ -206,7 +206,7 @@ public class ShareFragment extends Fragment  implements Filterable {
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 Log.d("SearchFragment","publishResults");
                 ((ShareAdapter) adapter).list = (ArrayList<Card>) filterResults.values;
-                for(Card card : ((CardAdapter) adapter).list){
+                for(Card card : ((ShareAdapter) adapter).list){
                     Log.d("SearchFragment","cardListFiltered:" + card.getName());
                 }
                 adapter.notifyDataSetChanged();
