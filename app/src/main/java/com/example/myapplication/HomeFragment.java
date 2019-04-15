@@ -51,11 +51,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         LinearLayout clickableLayoutAllCards = mView.findViewById(R.id.clickable_layout_all_cards);
         // get the linearLayout wich is our back cards button
         LinearLayout clickableLayoutBackCards = mView.findViewById(R.id.clickable_layout_back_cards);
+        // get the linearLayout wich is our heroes cards button
+        LinearLayout clickableLayoutHeroesCards = mView.findViewById(R.id.clickable_layout_heroes_cards);
 
         // set the click listener of the linear layout this (which implement the onClickListener interface)
         // then in the onClick we will do the clicks event for each layout
         clickableLayoutAllCards.setOnClickListener(this);
         clickableLayoutBackCards.setOnClickListener(this);
+        clickableLayoutHeroesCards.setOnClickListener(this);
 
         return mView;
     }
@@ -79,6 +82,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 if (getFragmentManager() != null)
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, new BackCardFragment()).commit();
                 break;
+            case R.id.clickable_layout_heroes_cards:
+                if (getFragmentManager() != null)
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HeroesFragment()).commit();
             default:
                 break;
         }
