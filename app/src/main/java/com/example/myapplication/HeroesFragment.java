@@ -201,8 +201,8 @@ public class HeroesFragment extends Fragment  implements Filterable {
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 Log.d("SearchFragment","publishResults");
-                ((CardAdapter) adapter).list = (ArrayList<Card>) filterResults.values;
-                for(Card card : ((CardAdapter) adapter).list){
+                ((HeroesCardAdapter) adapter).list = (ArrayList<Card>) filterResults.values;
+                for(Card card : ((HeroesCardAdapter) adapter).list){
                     Log.d("SearchFragment","cardListFiltered:" + card.getName());
                 }
                 adapter.notifyDataSetChanged();
