@@ -1,7 +1,9 @@
 package com.example.myapplication;
-import android.graphics.Color;
+
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AlertDialog;
@@ -13,17 +15,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
 import com.bumptech.glide.Glide;
 
+import java.util.List;
 
-public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
+
+public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
 
     private Context context;
     public List<Card> list;
 
 
-    public CardAdapter(Context context, List<Card> list) {
+    public ShareAdapter(Context context, List<Card> list) {
         this.context = context;
         this.list = list;
     }
@@ -39,7 +42,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
         public ConstraintLayout layout;
         public TextView textID, textName, textClass, textCost, textFlavor, textDescription;
-        public ImageView imageView, imageSaved;
+        public ImageView imageView, imageShare;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -56,7 +59,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             textDescription = itemView.findViewById(R.id.main_description);
 
             /* IMAGES */
-            imageSaved = itemView.findViewById(R.id.main_share);
+            imageShare = itemView.findViewById(R.id.main_share);
             imageView = itemView.findViewById(R.id.main_image);
         }
     }
@@ -68,7 +71,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     * */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.single_card, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.single_card_share, parent, false);
         return new ViewHolder(v);
     }
 
@@ -83,14 +86,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         holder.textFlavor.setText(card.getFlavor());
         holder.textDescription.setText(card.getCardText());
 
-        holder.imageSaved.setImageResource(R.drawable.hearts);
-
-        if (!savedCards.compare(card)){
-            holder.imageSaved.setImageAlpha(100);
-        }else
-        {
-            holder.imageSaved.setImageAlpha(255);
-        }
+        holder.imageShare.setImageResource(R.drawable.share);
 
         // the circular bar to wait until the image is downloaded
         CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);
@@ -143,22 +139,18 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             }
         });
 
-        holder.imageSaved.setOnClickListener(new View.OnClickListener(){
+        holder.imageShare.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
 
-                if(savedCards.compare(list.get(position))) {
-                    list.get(position).setSaved(false);
-                    holder.imageSaved.setImageAlpha(100);
-                    savedCards.deleteCard(list.get(position));
-                    savedCards.printList();
-                }
-                else{
-                    list.get(position).setSaved(true);
-                    holder.imageSaved.setImageAlpha(255);
-                    savedCards.addCard(list.get(position));
-                    savedCards.printList();
-                }
+            Intent myIntent = new Intent(Intent.ACTION_SEND);
+            myIntent.setType("text/plain");
+            String shareBody = "your body here";
+            String sharesub = " test ";
+            myIntent.putExtra(Intent.EXTRA_SUBJECT, sharesub);
+            myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+            v.getContext().startActivity(Intent.createChooser(myIntent, "share test"));
+
             }
         });
     }

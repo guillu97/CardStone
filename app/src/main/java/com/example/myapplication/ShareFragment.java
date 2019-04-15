@@ -2,10 +2,11 @@ package com.example.myapplication;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -31,7 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment implements Filterable {
+public class ShareFragment extends Fragment  implements Filterable {
 
     private Context context;
 
@@ -55,13 +57,12 @@ public class SearchFragment extends Fragment implements Filterable {
     private String url_image_256x = "https://art.hearthstonejson.com/v1/render/latest/enUS/256x/";
 
     private String url_gif = "http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/";
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        View currentView = inflater.inflate(R.layout.fragment_search, container,false );
-        context = getContext(); // get fragment and activity
+        View currentView = inflater.inflate(R.layout.fragment_share, container, false);
+        context = getContext();
 
         mList = currentView.findViewById(R.id.main_list_in_fragment);
 
@@ -212,4 +213,19 @@ public class SearchFragment extends Fragment implements Filterable {
             }
         };
     }
+
+    /*
+        bt = currentView.findViewById(R.id.main_share);
+        bt.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                String shareBody = "your body here";
+                String sharesub = " test ";
+                myIntent.putExtra(Intent.EXTRA_SUBJECT, sharesub);
+                myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(myIntent, "share test"));
+            }
+        });*/
 }

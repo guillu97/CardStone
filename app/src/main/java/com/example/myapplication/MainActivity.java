@@ -56,8 +56,9 @@ public class MainActivity extends AppCompatActivity{
                         case R.id.nav_search:
                             selectedFragment = new SearchFragment();
                             break;
-                        case R.id.nav_create:
-                            selectedFragment = new CreateFragment();
+                        case R.id.nav_share:
+
+                            selectedFragment = new ShareFragment();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();

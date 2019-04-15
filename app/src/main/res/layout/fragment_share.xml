@@ -36,6 +36,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_view"/>
 
-
-
 </android.support.constraint.ConstraintLayout>
