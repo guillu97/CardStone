@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 import com.bumptech.glide.Glide;
@@ -152,12 +153,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                     holder.imageSaved.setImageAlpha(100);
                     savedCards.deleteCard(list.get(position));
                     savedCards.printList();
+                    Toast.makeText(context, "The card has been removed from your favorite cards", Toast.LENGTH_SHORT).show();
+
                 }
                 else{
                     list.get(position).setSaved(true);
                     holder.imageSaved.setImageAlpha(255);
                     savedCards.addCard(list.get(position));
                     savedCards.printList();
+                    Toast.makeText(context, "The card has been saved into your favorite cards", Toast.LENGTH_SHORT).show();
                 }
             }
         });

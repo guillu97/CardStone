@@ -78,7 +78,7 @@ public class SearchFragment extends Fragment implements Filterable {
         progressDialog.dismiss();
 
         adapter = new CardAdapter(context,cardListFiltered);
-        savedAdapter = new CardAdapter(context,cardList);
+        //savedAdapter = new CardAdapter(context,cardList);
 
         gridLayoutManager = new GridLayoutManager(context, NUMBER_OF_COLUMN);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
