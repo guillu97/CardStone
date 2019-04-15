@@ -3,7 +3,12 @@ package com.example.myapplication;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AlertDialog;
@@ -143,13 +148,21 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
 
+            Drawable mDrawable = holder.imageView.getDrawable();
+            Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
+
+            String path = MediaStore.Images.Media.insertImage(v.getContext().getContentResolver(), mBitmap, "Image Description", null);
+            Uri uri = Uri.parse(path);
+
             Intent myIntent = new Intent(Intent.ACTION_SEND);
-            myIntent.setType("text/plain");
-            String shareBody = "your body here";
+            myIntent.setType("image/jpeg");
+            /*String shareBody = "your body here";
             String sharesub = " test ";
             myIntent.putExtra(Intent.EXTRA_SUBJECT, sharesub);
             myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-            v.getContext().startActivity(Intent.createChooser(myIntent, "share test"));
+            */
+            myIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            v.getContext().startActivity(Intent.createChooser(myIntent, "Share Image"));
 
             }
         });

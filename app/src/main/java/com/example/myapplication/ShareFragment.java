@@ -78,8 +78,8 @@ public class ShareFragment extends Fragment  implements Filterable {
 
         progressDialog.dismiss();
 
-        adapter = new CardAdapter(context,cardListFiltered);
-        savedAdapter = new CardAdapter(context,cardList);
+        adapter = new ShareAdapter(context,cardListFiltered);
+        savedAdapter = new ShareAdapter(context,cardList);
 
         gridLayoutManager = new GridLayoutManager(context, NUMBER_OF_COLUMN);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
@@ -181,7 +181,7 @@ public class ShareFragment extends Fragment  implements Filterable {
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
                 if (charString.isEmpty()) {
-                    ((CardAdapter) adapter).list = cardList;
+                    ((ShareAdapter) adapter).list = cardList;
                 } else {
                     Log.d("SearchFragment","charSequence in getfilter:" + charSequence);
                     List<Card> filteredList = new ArrayList<>();
@@ -205,7 +205,7 @@ public class ShareFragment extends Fragment  implements Filterable {
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 Log.d("SearchFragment","publishResults");
-                ((CardAdapter) adapter).list = (ArrayList<Card>) filterResults.values;
+                ((ShareAdapter) adapter).list = (ArrayList<Card>) filterResults.values;
                 for(Card card : ((CardAdapter) adapter).list){
                     Log.d("SearchFragment","cardListFiltered:" + card.getName());
                 }
