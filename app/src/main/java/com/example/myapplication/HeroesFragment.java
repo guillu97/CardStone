@@ -176,7 +176,7 @@ public class HeroesFragment extends Fragment  implements Filterable {
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
                 if (charString.isEmpty()) {
-                    ((CardAdapter) adapter).list = cardList;
+                    ((HeroesCardAdapter) adapter).list = cardList;
                 } else {
                     Log.d("SearchFragment","charSequence in getfilter:" + charSequence);
                     List<Card> filteredList = new ArrayList<>();
@@ -200,10 +200,10 @@ public class HeroesFragment extends Fragment  implements Filterable {
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                Log.d("SearchFragment","publishResults");
+                Log.d("HeroesFragment","publishResults");
                 ((HeroesCardAdapter) adapter).list = (ArrayList<Card>) filterResults.values;
                 for(Card card : ((HeroesCardAdapter) adapter).list){
-                    Log.d("SearchFragment","cardListFiltered:" + card.getName());
+                    Log.d("HeroesFragment","cardListFiltered:" + card.getName());
                 }
                 adapter.notifyDataSetChanged();
 
