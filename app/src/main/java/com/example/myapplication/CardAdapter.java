@@ -1,7 +1,9 @@
 package com.example.myapplication;
+import android.graphics.Color;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,12 +15,14 @@ import android.widget.TextView;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 import java.util.List;
+import com.bumptech.glide.Glide;
 
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private Context context;
-    private List<Card> list;
+    public List<Card> list;
+
 
     public CardAdapter(Context context, List<Card> list) {
         this.context = context;
@@ -65,12 +69,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     * */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.single_item, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.single_card, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         Card card = list.get(position);
 
         holder.textID.setText(String.valueOf(card.getId()));
@@ -85,10 +89,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             holder.imageSaved.setImageAlpha(100);
         }
 
-        //holder.imageView.setImageBitmap(card.getBitmap());
-
+        // the circular bar to wait until the image is downloaded
+        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);
+        circularProgressDrawable.setStrokeWidth(5f);
+        circularProgressDrawable.setCenterRadius(30f);
+        circularProgressDrawable.start();
         // download the image from the image_url for the images in the list
-        Picasso.with(context).load(card.getImage_url_256x()).into(holder.imageView);
+        Glide.with(context).load(list.get(position).getImage_url()).placeholder(circularProgressDrawable).into(holder.imageView);
 
         // on click of the linear layout of a card item in the list
         holder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -112,21 +119,24 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
                 //ImageView imgView = view.findViewById(R.id.image_view_details);
                 //ImageView img = new ImageView(imageView);
-                PhotoView photoView = view.findViewById(R.id.photo_view);
+                //PhotoView photoView = view.findViewById(R.id.photo_view);
                 //photoView.
 
-                // download the image from the image_url for the image in the dialog
-                Picasso.with(context).load(list.get(position).getImage_url_512x()).into(photoView);
+                // the image view on the xml file
+                ImageView imageView = view.findViewById(R.id.image_view);
 
-                /*
-                //to add a button on the dialog
-                alertadd.setNeutralButton("Close", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dlg, int sumthin) {
 
-                    }
-                });
-                */
-                alertadd.show();
+                // the circular bar to wait until the image is downloaded
+                CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);
+                circularProgressDrawable.setColorSchemeColors(Color.WHITE);
+                circularProgressDrawable.setStrokeWidth(30f);
+                circularProgressDrawable.setCenterRadius(50f);
+                circularProgressDrawable.start();
+
+                // downloading the gif
+                Glide.with(context).asGif().load(list.get(position).getGif_url()).placeholder(circularProgressDrawable).into(imageView);
+
+            alertadd.show();
             }
         });
 
@@ -151,3 +161,27 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         return list.size();
     }
 }
+
+/*
+    // code to create a new intent from the recycler view and send the card through extra message
+
+            Intent intent = new Intent(context, CardDetails.class);
+
+            /*
+            *   getLayoutPosition()
+            *   or
+            *   getAdapterPosition()
+            *   ?
+
+
+            Card cardSelected = list.get(getLayoutPosition());
+
+            intent.putExtra(EXTRA_MESSAGE, cardSelected );
+
+            /*String message = textID.getText().toString();
+            intent.putExtra(EXTRA_MESSAGE, message);
+
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+ */

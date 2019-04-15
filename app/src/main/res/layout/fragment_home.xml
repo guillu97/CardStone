@@ -42,11 +42,13 @@
                 android:layout_margin="10dp">
 
                 <LinearLayout
+                    android:id="@+id/clickable_layout_all_cards"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="16dp"
                     android:orientation="vertical">
+
 
                     <ImageView
                         android:layout_width="100dp"
@@ -105,6 +107,7 @@
                 android:layout_margin="10dp">
 
                 <LinearLayout
+                    android:id="@+id/clickable_layout_back_cards"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
