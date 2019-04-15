@@ -1,8 +1,11 @@
 package com.example.myapplication;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +13,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -21,8 +26,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.util.List;
+
+import static android.support.v4.app.ActivityCompat.requestPermissions;
 
 
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
@@ -148,25 +162,92 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
 
-            Drawable mDrawable = holder.imageView.getDrawable();
-            Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
+                // Here, thisActivity is the current activity
+                /*if (ContextCompat.checkSelfPermission(v.getContext(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
 
-            String path = MediaStore.Images.Media.insertImage(v.getContext().getContentResolver(), mBitmap, "Image Description", null);
-            Uri uri = Uri.parse(path);
+                    // Permission is not granted
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        // Show an explanation to the user *asynchronously* -- don't block
+                        // this thread waiting for the user's response! After the user
+                        // sees the explanation, try again to request the permission.
+                    } else {
+                        // No explanation needed; request the permission
+                        ActivityCompat.requestPermissions((Activity) context,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 
-            Intent myIntent = new Intent(Intent.ACTION_SEND);
-            myIntent.setType("image/jpeg");
-            /*String shareBody = "your body here";
-            String sharesub = " test ";
-            myIntent.putExtra(Intent.EXTRA_SUBJECT, sharesub);
-            myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-            */
-            myIntent.putExtra(Intent.EXTRA_STREAM, uri);
-            v.getContext().startActivity(Intent.createChooser(myIntent, "Share Image"));
+                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    }
+                } else {
+                    // Permission has already been granted
+                }*/
 
-            }
+                Dexter.withActivity((Activity)context)
+                        .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .withListener(new PermissionListener() {
+                            @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+
+                                Drawable mDrawable = holder.imageView.getDrawable();
+                                Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
+
+                                String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), mBitmap, "Image Description", null);
+                                Uri uri = Uri.parse(path);
+
+                                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                                myIntent.setType("image/jpeg");
+                                /*String shareBody = "your body here";
+                                String sharesub = " test ";
+                                myIntent.putExtra(Intent.EXTRA_SUBJECT, sharesub);
+                                myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                                */
+                                myIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                                context.startActivity(Intent.createChooser(myIntent, "Share Image"));
+
+                            }
+                            @Override public void onPermissionDenied(PermissionDeniedResponse response) {/* ... */}
+                            @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, final PermissionToken token) {
+                                /*new AlertDialog.Builder(context)
+                                        .setTitle("Ask for permission")
+                                        .setMessage("We would like to use your storage for temporary image share")
+                                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                            @Override public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                                token.cancelPermissionRequest();
+                                            }
+                                        })
+                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                            @Override public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                                token.continuePermissionRequest();
+                                            }
+                                        })
+                                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                            @Override public void onDismiss(DialogInterface dialog) {
+                                                token.cancelPermissionRequest();
+                                            }
+                                        })
+                                        .show();*/
+                                token.continuePermissionRequest();
+                            }
+                        }).check();
+
+
+
+
+                }
+
+
         });
+
     }
+
+
 
     @Override
     public int getItemCount() {
